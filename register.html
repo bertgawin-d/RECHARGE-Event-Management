@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RECHARGE — Event Registration</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="bg-glow" aria-hidden="true"></div>
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <main class="register-page">
+    <section class="register-card glass">
+      <a href="index.html" class="register-back">← Back to events</a>
+      <p class="register-subtitle">Registration</p>
+      <h1>Complete your event form</h1>
+      <p class="subtitle">Register for your selected event and add your team details.</p>
+
+      <div class="event-banner">
+        <strong id="selectedEventName">Event</strong>
+        <small id="selectedEventMeta">Loading event details...</small>
+      </div>
+
+      <form id="registerPageForm" novalidate>
+        <div class="field">
+          <label>Event Type</label>
+          <div class="segmented-choice">
+            <label><input type="radio" name="eventType" value="Technical" checked> Technical</label>
+            <label><input type="radio" name="eventType" value="Non-Technical"> Non-Technical</label>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="regPageName">Student Name</label>
+            <input type="text" id="regPageName" placeholder="Your full name">
+            <small class="error-msg"></small>
+          </div>
+          <div class="field">
+            <label for="regPageEmail">Email</label>
+            <input type="email" id="regPageEmail" placeholder="you@college.edu">
+            <small class="error-msg"></small>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label for="regPageDept">Department</label>
+            <select id="regPageDept">
+              <option value="">Select department</option>
+              <option>Computer Science</option>
+              <option>Information Technology</option>
+              <option>Electronics &amp; Communication</option>
+              <option>Electrical &amp; Electronics</option>
+              <option>Mechanical</option>
+              <option>Civil</option>
+              <option>Other</option>
+            </select>
+            <small class="error-msg"></small>
+          </div>
+          <div class="field">
+            <label for="regPageYear">Year of Study</label>
+            <select id="regPageYear">
+              <option value="">Select year</option>
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>4th Year</option>
+            </select>
+            <small class="error-msg"></small>
+          </div>
+        </div>
+
+        <div id="teamFields" class="hidden">
+          <div class="field">
+            <label for="teamName">Team Name</label>
+            <input type="text" id="teamName" placeholder="Enter your team name">
+            <small class="error-msg"></small>
+          </div>
+
+          <div class="field">
+            <label for="teamMembers">Team Members Names</label>
+            <textarea id="teamMembers" placeholder="Add member names separated by commas or each on a new line"></textarea>
+            <small class="error-msg"></small>
+          </div>
+        </div>
+
+        <p class="form-message" id="registerPageMessage"></p>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">Register Now</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

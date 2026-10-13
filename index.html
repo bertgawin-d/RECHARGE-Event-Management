@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="RECHARGE — College Event Management System">
+  <title>RECHARGE — College Event Management</title>
+
+  <!-- Google Fonts: Unbounded (headings) + Space Grotesk (body) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Unbounded:wght@600;800&display=swap" rel="stylesheet">
+
+  <!-- Main stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Decorative neon background glow -->
+  <div class="bg-glow" aria-hidden="true"></div>
+
+  <!-- Toast messages (success / error / info) appear here -->
+  <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+  <!-- =====================================================
+       AUTH VIEW — Login and Signup
+       ===================================================== -->
+  <section id="authView" class="auth-view hidden">
+
+    <!-- Left side: brand -->
+    <div class="auth-brand">
+      <h1 class="logo">RE<span>CHARGE</span></h1>
+      <p class="tagline">Your Campus. Your Energy.</p>
+      <p class="demo-note">
+        Academic demo: accounts and registrations are stored in your browser's
+        LocalStorage. This is a simulation and is <strong>not</strong> secure authentication.
+      </p>
+    </div>
+
+    <!-- Right side: forms card -->
+    <div class="auth-card glass">
+
+      <!-- ---------- LOGIN FORM ---------- -->
+      <form id="loginForm" class="auth-form" novalidate>
+        <h2>Welcome back</h2>
+        <p class="muted">Log in to explore and register for events.</p>
+
+        <div class="field">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" placeholder="you@college.edu" autocomplete="email">
+          <small class="error-msg"></small>
+        </div>
+
+        <div class="field">
+          <label for="loginPassword">Password</label>
+          <div class="password-wrap">
+            <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+            <button type="button" class="toggle-pass" data-target="loginPassword" aria-label="Show password">Show</button>
+          </div>
+          <small class="error-msg"></small>
+        </div>
+
+        <p class="form-error" id="loginError"></p>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <p class="switch-text">New to RECHARGE? <a href="#" data-auth="signup">Create an account</a></p>
+      </form>
+
+      <!-- ---------- SIGNUP FORM ---------- -->
+      <form id="signupForm" class="auth-form hidden" novalidate>
+        <h2>Create account</h2>
+        <p class="muted">Join RECHARGE and never miss a campus event.</p>
+
+        <div class="field">
+          <label for="signupName">Full Name</label>
+          <input type="text" id="signupName" placeholder="e.g. Priya Sharma" autocomplete="name">
+          <small class="error-msg"></small>
+        </div>
+
+        <div class="field">
+          <label for="signupEmail">College Email</label>
+          <input type="email" id="signupEmail" placeholder="you@college.edu" autocomplete="email">
+          <small class="error-msg"></small>
+        </div>
+
+        <div class="field">
+          <label for="signupDept">Department</label>
+          <select id="signupDept">
+            <option value="">Select your department</option>
+            <option>Computer Science</option>
+            <option>Information Technology</option>
+            <option>Electronics &amp; Communication</option>
+            <option>Electrical &amp; Electronics</option>
+            <option>Mechanical</option>
+            <option>Civil</option>
+            <option>Other</option>
+          </select>
+          <small class="error-msg"></small>
+        </div>
+
+        <div class="field">
+          <label for="signupPassword">Password</label>
+          <div class="password-wrap">
+            <input type="password" id="signupPassword" placeholder="At least 6 characters" autocomplete="new-password">
+            <button type="button" class="toggle-pass" data-target="signupPassword" aria-label="Show password">Show</button>
+          </div>
+          <small class="error-msg"></small>
+        </div>
+
+        <div class="field">
+          <label for="signupConfirm">Confirm Password</label>
+          <div class="password-wrap">
+            <input type="password" id="signupConfirm" placeholder="Re-enter password" autocomplete="new-password">
+            <button type="button" class="toggle-pass" data-target="signupConfirm" aria-label="Show password">Show</button>
+          </div>
+          <small class="error-msg"></small>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+        <p class="switch-text">Already have an account? <a href="#" data-auth="login">Login</a></p>
+      </form>
+    </div>
+  </section>
+
+  <!-- =====================================================
+       APP VIEW — shown after login
+       ===================================================== -->
+  <div id="appView" class="hidden">
+
+    <!-- ---------- NAVIGATION BAR ---------- -->
+    <header class="navbar">
+      <a href="#" class="logo" data-view="home">RE<span>CHARGE</span></a>
+
+      <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="#" class="nav-link active" data-view="home">Home</a>
+        <a href="#" class="nav-link" data-view="explore">Explore Events</a>
+        <a href="#" class="nav-link" data-view="registrations">
+          My Registrations <span class="nav-badge" id="navBadge">0</span>
+        </a>
+        <button type="button" class="btn btn-outline btn-sm" id="logoutBtn">Logout</button>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- ---------- HOME / DASHBOARD ---------- -->
+      <section id="homeView" class="view">
+        <div class="container">
+
+          <!-- Hero banner -->
+          <div class="hero">
+            <p class="welcome">Welcome, <span id="welcomeName">Student</span> ⚡</p>
+            <h1>Your Campus. Your Energy. <span class="gradient-text">Your RECHARGE.</span></h1>
+            <p>Hackathons, cultural nights, workshops and symposiums — discover what's happening on campus and grab your spot in one click.</p>
+            <div class="hero-actions">
+              <button type="button" class="btn btn-primary" data-view="explore">Explore Events</button>
+              <button type="button" class="btn btn-ghost" data-view="registrations">My Registrations</button>
+            </div>
+          </div>
+
+          <!-- Statistics -->
+          <div class="stats">
+            <div class="stat glass reveal">
+              <div class="stat-value" id="statEvents">0</div>
+              <div class="stat-label">Available Events</div>
+            </div>
+            <div class="stat glass reveal">
+              <div class="stat-value" id="statRegs">0</div>
+              <div class="stat-label">My Registrations</div>
+            </div>
+            <div class="stat glass reveal">
+              <div class="stat-value" id="statCats">0</div>
+              <div class="stat-label">Event Categories</div>
+            </div>
+          </div>
+
+          <!-- Quick search and category filters -->
+          <div class="quick-panel glass reveal">
+            <form id="quickSearchForm" class="search-form">
+              <input type="search" id="quickSearchInput" placeholder="Search events by name, venue or category…" aria-label="Search events">
+              <button type="submit" class="btn btn-primary">Search</button>
+            </form>
+            <div class="quick-cats" id="quickCats"></div>
+          </div>
+
+          <!-- Upcoming events -->
+          <div class="section-head">
+            <div>
+              <h2>Upcoming Events</h2>
+              <p class="muted">The next events on the campus calendar.</p>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm" data-view="explore">View all →</button>
+          </div>
+          <div class="events-grid" id="upcomingGrid"></div>
+        </div>
+      </section>
+
+      <!-- ---------- EXPLORE EVENTS ---------- -->
+      <section id="exploreView" class="view hidden">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>Explore Events</h2>
+              <p class="muted">Search and filter every event happening on campus.</p>
+            </div>
+          </div>
+
+          <div class="toolbar glass">
+            <input type="search" id="searchInput" placeholder="🔍  Search events…" aria-label="Search events">
+            <div class="filter-bar" id="filterBar"></div>
+          </div>
+
+          <p class="result-count" id="resultCount"></p>
+          <div class="events-grid" id="eventsGrid"></div>
+
+          <!-- Empty state when search finds nothing -->
+          <div class="empty-state glass hidden" id="noResults">
+            <div class="empty-icon">🔎</div>
+            <h3>No events match your search</h3>
+            <p class="muted">Try a different keyword or category.</p>
+            <button type="button" class="btn btn-primary btn-sm" id="clearFilters">Clear filters</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ---------- MY REGISTRATIONS ---------- -->
+      <section id="registrationsView" class="view hidden">
+        <div class="container">
+          <div class="section-head">
+            <div>
+              <h2>My Registrations</h2>
+              <p class="muted" id="regsCount">You have 0 registrations.</p>
+            </div>
+            <button type="button" class="btn btn-ghost btn-sm" data-view="explore">+ Find more events</button>
+          </div>
+
+          <div class="reg-list" id="registrationsList"></div>
+
+          <!-- Empty state when no registrations -->
+          <div class="empty-state glass hidden" id="emptyRegistrations">
+            <div class="empty-icon">🎟️</div>
+            <h3>No registrations yet</h3>
+            <p class="muted">You haven't signed up for any events. Your next adventure is one click away!</p>
+            <button type="button" class="btn btn-primary btn-sm" data-view="explore">Explore Events</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ---------- FOOTER ---------- -->
+    <footer class="footer">
+      <div class="container footer-grid">
+        <div>
+          <a href="#" class="logo" data-view="home">RE<span>CHARGE</span></a>
+          <p class="muted footer-about">The official event hub for students — discover, register and recharge your campus life.</p>
+        </div>
+        <div>
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#" data-view="home">Home</a></li>
+            <li><a href="#" data-view="explore">Explore Events</a></li>
+            <li><a href="#" data-view="registrations">My Registrations</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4>Contact</h4>
+          <ul>
+            <li><a href="mailto:events@recharge-college.edu">events@recharge-college.edu</a></li>
+            <li><a href="tel:+919876543210">+91 98765 43210</a></li>
+            <li>Student Activity Centre, Main Campus</li>
+          </ul>
+        </div>
+        <div>
+          <h4>Follow Us</h4>
+          <div class="socials">
+            <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
+            <a href="https://www.linkedin.com" target="_blank" rel="noopener" aria-label="LinkedIn">in</a>
+            <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
+            <a href="https://x.com" target="_blank" rel="noopener" aria-label="X (Twitter)">X</a>
+          </div>
+        </div>
+      </div>
+      <p class="footer-bottom">© <span id="year"></span> RECHARGE · Web Programming Academic Project</p>
+    </footer>
+  </div>
+
+  <!-- =====================================================
+       MODALS
+       ===================================================== -->
+
+  <!-- Event Details modal -->
+  <div class="modal" id="detailsModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="detailsTitle">
+    <div class="modal-box glass">
+      <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+      <div id="detailsContent"></div>
+    </div>
+  </div>
+
+  <!-- Registration modal -->
+  <div class="modal" id="registerModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="registerTitle">
+    <div class="modal-box glass">
+      <button type="button" class="modal-close" data-close aria-label="Close">×</button>
+      <h2 id="registerTitle">Event Registration</h2>
+      <div class="event-summary" id="registerEventSummary"></div>
+
+      <form id="registerForm" novalidate>
+        <div class="form-row">
+          <div class="field">
+            <label for="regName">Student Name</label>
+            <input type="text" id="regName" placeholder="Your full name">
+            <small class="error-msg"></small>
+          </div>
+          <div class="field">
+            <label for="regEmail">Email</label>
+            <input type="email" id="regEmail" placeholder="you@college.edu">
+            <small class="error-msg"></small>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for="regDept">Department</label>
+            <select id="regDept">
+              <option value="">Select department</option>
+              <option>Computer Science</option>
+              <option>Information Technology</option>
+              <option>Electronics &amp; Communication</option>
+              <option>Electrical &amp; Electronics</option>
+              <option>Mechanical</option>
+              <option>Civil</option>
+              <option>Other</option>
+            </select>
+            <small class="error-msg"></small>
+          </div>
+          <div class="field">
+            <label for="regYear">Year of Study</label>
+            <select id="regYear">
+              <option value="">Select year</option>
+              <option>1st Year</option>
+              <option>2nd Year</option>
+              <option>3rd Year</option>
+              <option>4th Year</option>
+            </select>
+            <small class="error-msg"></small>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" data-close>Cancel</button>
+          <button type="submit" class="btn btn-primary">Confirm Registration</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Confirmation modal (cancel registration) -->
+  <div class="modal modal-sm" id="confirmModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="modal-box glass">
+      <div class="empty-icon">⚠️</div>
+      <h2 id="confirmTitle">Cancel registration?</h2>
+      <p class="muted" id="confirmText"></p>
+      <div class="modal-actions center">
+        <button type="button" class="btn btn-ghost" data-close>Keep it</button>
+        <button type="button" class="btn btn-danger" id="confirmYes">Yes, cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main script -->
+  <script src="script.js"></script>
+</body>
+</html>
